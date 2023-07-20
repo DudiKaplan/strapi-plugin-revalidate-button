@@ -1,5 +1,7 @@
 # Strapi plugin Revalidate
 
+<img style="width: 960px; height: auto;" src="public/image.png" alt="Screenshot for list view in Strapi revalidate button plugin" />
+
 The plugin comes as a solution to the problem that Webhoock does not have a solution for a manual run, and we want to allow the user to first check his content in Preview.
 
 The user can press a button called "Revalidate" after he has looked at the Preview and is sure of the new content and manually refer to the page (Next.js) that will update the new content.
