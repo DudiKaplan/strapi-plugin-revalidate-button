@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-revalidate-button",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Adds a revalidate button to the content manager edit view.",
   "strapi": {
     "name": "revalidate-button",
