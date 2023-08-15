@@ -13,7 +13,7 @@ import { useNotification } from "@strapi/helper-plugin";
 import getTrad from "../../utils/getTrad";
 
 const RevalidateButton = () => {
-  const { modifiedData } = useCMEditViewDataManager();
+  const { modifiedData, layout } = useCMEditViewDataManager();
   const toggleNotification = useNotification();
   const { formatMessage } = useIntl();
   const { get } = useFetchClient();
@@ -30,7 +30,7 @@ const RevalidateButton = () => {
     return data;
   });
 
-  const handleClick = async (event) => {
+  const handleClick = async (model) => {
     try {
       const webhook = webhooks.find((item) => item.name === "Revalidate");
       await fetch(webhook.url, {
@@ -38,13 +38,13 @@ const RevalidateButton = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ entry: { Slug: modifiedData?.Slug } }),
+        body: JSON.stringify({ model, entry: { slug: modifiedData?.slug } }),
       });
       toggleNotification({
         type: "success",
         message: {
           id: "notification.success.revalidate",
-          defaultMessage: `Revalidate request send for Slug: ${modifiedData?.Slug} `,
+          defaultMessage: `Revalidate request send for slug: ${modifiedData?.slug} `,
         },
       });
     } catch (error) {
@@ -72,7 +72,7 @@ const RevalidateButton = () => {
 
   return !isWebhooksLoading && modifiedData.publishedAt ? (
     <Button
-      onClick={handleClick}
+      onClick={() => handleClick(layout?.apiID)}
       size="M"
       startIcon={<Play />}
       variant="main"
