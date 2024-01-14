@@ -1,23 +1,20 @@
-import React, { memo, useEffect } from "react";
-import { useIntl } from "react-intl";
-import { Button } from "@strapi/design-system";
-import { Play } from "@strapi/icons";
-import { useQuery } from "react-query";
+import React, { memo, useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { Button } from '@strapi/design-system';
+import { Play } from '@strapi/icons';
+import { useQuery } from 'react-query';
 
-import {
-  useCMEditViewDataManager,
-  useFetchClient,
-} from "@strapi/helper-plugin";
-import { useNotification } from "@strapi/helper-plugin";
+import { useCMEditViewDataManager, useFetchClient } from '@strapi/helper-plugin';
+import { useNotification } from '@strapi/helper-plugin';
 
-import getTrad from "../../utils/getTrad";
+import getTrad from '../../utils/getTrad';
 
 const RevalidateButton = () => {
   const { modifiedData, layout } = useCMEditViewDataManager();
   const toggleNotification = useNotification();
   const { formatMessage } = useIntl();
   const { get } = useFetchClient();
-  const QUERY_KEY = "webhooks";
+  const QUERY_KEY = 'webhooks';
 
   const {
     isLoading: isWebhooksLoading,
@@ -26,32 +23,32 @@ const RevalidateButton = () => {
   } = useQuery(QUERY_KEY, async () => {
     const {
       data: { data },
-    } = await get("/admin/webhooks");
+    } = await get('/admin/webhooks');
     return data;
   });
 
   const handleClick = async (model) => {
     try {
-      const webhook = webhooks.find((item) => item.name === "Revalidate");
+      const webhook = webhooks.find((item) => item.name === 'Revalidate');
       await fetch(webhook.url, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ model, entry: { slug: modifiedData?.slug } }),
+        body: JSON.stringify({ model, entry: { slug: modifiedData?.slug || modifiedData?.Slug || null } }),
       });
       toggleNotification({
-        type: "success",
+        type: 'success',
         message: {
-          id: "notification.success.revalidate",
+          id: 'notification.success.revalidate',
           defaultMessage: `Revalidate request send for slug: ${modifiedData?.slug} `,
         },
       });
     } catch (error) {
       toggleNotification({
-        type: "warning",
+        type: 'warning',
         message: {
-          id: "notification.error.revalidate",
+          id: 'notification.error.revalidate',
           defaultMessage: `Revalidate field `,
         },
       });
@@ -61,9 +58,9 @@ const RevalidateButton = () => {
   useEffect(() => {
     if (webhooksError) {
       toggleNotification({
-        type: "warning",
+        type: 'warning',
         message: {
-          id: "notification.error.revalidate",
+          id: 'notification.error.revalidate',
           defaultMessage: `Error load ${QUERY_KEY} `,
         },
       });
@@ -76,11 +73,11 @@ const RevalidateButton = () => {
       size="M"
       startIcon={<Play />}
       variant="main"
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     >
       {formatMessage({
-        id: getTrad("form.button.revalidate"),
-        defaultMessage: "Revalidate",
+        id: getTrad('form.button.revalidate'),
+        defaultMessage: 'Revalidate',
       })}
     </Button>
   ) : (
